@@ -63,8 +63,10 @@ function getCard(arr) {
         makeCard(item);
     })
 };
+//ф-ия получения карт с использ forEach(перебор item массива) и созд с помощью ф-ии  makeCard карт )
 
-getCard(currentWords);
+getCard(words);
+// вызываем функц и в параменты подставлем наш массив со словами
 
 function getRandomCard(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
@@ -73,3 +75,34 @@ function getRandomCard(arr) {
 shuffleWords.addEventListener('click', () => {
     makeCard(getRandomCard(currentWords));
 });
+
+let currentWordsIndex = 0;
+//хранит индекс текущий карточки
+
+function showCard(index) {
+    currentWords.textContent = currentWords[index]
+}
+
+function nextCard() {
+    currentWordsIndex++;
+
+    if (currentWordsIndex >= currentWords.length) {
+        currentWordsIndex = 0;
+    }
+
+    showCard(currentWordsIndex)
+}
+
+function prevCard() {
+    currentWordsIndex--;
+
+    if (currentWordsIndex < 0) {
+        currentWordsIndex = currentWords.length - 1;
+    }
+
+    showCard(currentWordsIndex)
+}
+
+nextBtn.addEventListener("click", nextCard);
+
+backBtn.addEventListener("click", prevCard);
