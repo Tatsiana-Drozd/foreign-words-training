@@ -14,7 +14,11 @@ const shuffleWords = document.querySelector('#shuffle-words');
 // создали переменную кнопки 'Перемешать слова'
 
 const testBtn = document.querySelector("#exam")
-    // создали переменную кнопки "Тестирование"; 
+    // создали переменную кнопки "Тестирование";
+
+const currentWordCount = document.querySelector("#current-word");
+
+const wordsProgress = document.querySelector("#words-progress");
 
 const words = [{
         word: "собака",
@@ -63,16 +67,18 @@ function getCard(arr) {
         makeCard(item);
     })
 };
-//ф-ия получения карт с использ forEach(перебор item массива) и созд с помощью ф-ии  makeCard карт )
+//ф-ия получения карт с использ forEach(перебор item массива) и созд с помощью ф-ии makeCard карт )
 
 getCard(words);
 // вызываем функц и в параменты подставлем наш массив со словами
+handleProgress();
 
 function getRandomCard(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
 shuffleWords.addEventListener('click', () => {
+    words.sort(() => Math.random() - 0.5);
     makeCard(getRandomCard(currentWords));
 });
 
@@ -80,29 +86,33 @@ let currentWordsIndex = 0;
 //хранит индекс текущий карточки
 
 function showCard(index) {
-    currentWords.textContent = currentWords[index]
+    makeCard(currentWords[index]);
 }
 
 function nextCard() {
     currentWordsIndex++;
-
-    if (currentWordsIndex >= currentWords.length) {
-        currentWordsIndex = 0;
-    }
-
-    showCard(currentWordsIndex)
+    showCard(currentWordsIndex);
+    handleControls(currentWordsIndex);
 }
 
 function prevCard() {
     currentWordsIndex--;
-
-    if (currentWordsIndex < 0) {
-        currentWordsIndex = currentWords.length - 1;
-    }
-
-    showCard(currentWordsIndex)
+    showCard(currentWordsIndex);
+    handleControls(currentWordsIndex);
 }
 
 nextBtn.addEventListener("click", nextCard);
 
 backBtn.addEventListener("click", prevCard);
+
+function handleControls(idx) {
+    nextBtn.disabled = idx === words.length - 1;
+    backBtn.disabled = idx === 0;
+    handleProgress(idx);
+}
+
+function handleProgress(idx = 0) {
+    currentWordCount.textContent = idx + 1;
+    const progress = ((idx + 1) / words.length) * 100;
+    wordsProgress.value = Math.ceil(progress);
+}
